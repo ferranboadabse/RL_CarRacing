@@ -1,0 +1,18 @@
+[project]
+name = "rl-carracing"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "box2d>=2.3.10",
+    "gymnasium>=1.2.0",
+    "ipykernel>=6.29.5",
+    "matplotlib>=3.10.3",
+    "numpy>=2.3.1",
+    "opencv-python>=4.11.0.86",
+    "pandas>=2.3.0",
+    "pygame>=2.6.1",
+    "seaborn>=0.13.2",
+    "tqdm>=4.67.1",
+]
