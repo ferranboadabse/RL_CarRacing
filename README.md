@@ -28,15 +28,19 @@ Uses Stable-Baselines3’s DQN with a CNN policy to approximate Q(s,a) from raw 
 │   └── utils.py                # helpers to read JSON results, extract video frames, plot grids 
 ```
 
-## Environment Installation
-1. **Clone the Repository**  
-   `git clone <repository_url>`
+## Dependencies
 
-2. **Set Up Environment**  
-   - Install Python 3.9 or higher.
-   - Create a virtual environment: `python -m venv rl_env`
+```bash
+pip install gymnasium==0.28.1 stable-baselines3==2.3.2 imageio numpy==1.23.5 matplotlib pandas cv2 tqdm
+```
 
-3. **Install Dependencies**  
-   Run the following to install required packages:
-   ```bash
-   pip install gymnasium==0.28.1 stable-baselines3==2.3.2 imageio numpy==1.23.5 matplotlib pandas cv2 tqdm
+## Local Development
+
+We use **uv** for environment management:
+
+```bash
+# Install uv for Python environment management
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Create and sync the environment from pyproject.toml or requirements.txt
+uv sync
