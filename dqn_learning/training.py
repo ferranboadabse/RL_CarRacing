@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 import imageio
 import numpy as np
 import gymnasium as gym
@@ -50,21 +51,39 @@ def train(experiment_start, n_timesteps=50_000):
         render=False,
         verbose=1,
     )
-    learning_starts = int(0.3 * n_timesteps)
+    learning_starts = int(0.2 * n_timesteps)
+    parameters = {
+        "learning_rate": 3e-4, # How fast the model updates its Q-values. Smaller = slower but more stable learning.
+        "buffer_size": 100_000, # Size of replay buffer. Stores past experiences to sample from during training.
+        "batch_size": 128, # Number of experiences sampled from replay buffer per update. Larger batch = more stable updates.
+        "learning_starts": learning_starts, # Number of timesteps before learning begins. Helps the replay buffer fill with experiences first.
+        "gamma": 0.99, # Discount factor. Determines how much future rewards are considered. Closer to 1 = long-term focused.
+        "exploration_initial_eps": 1.0, # Start of ε-greedy exploration. Agent takes completely random actions initially.
+        "exploration_final_eps": 0.05, # Final ε value. Even late in training, there's a 5% chance of random actions (exploration).
+        "exploration_fraction": 0.2, # Fraction of total training steps over which ε linearly decays from 1.0 to 0.05.
+        "target_update_interval": 1_000, # How often (in steps) the target network is updated. More frequent updates can stabilize learning.
+        "train_freq": 4, # How often the model trains (every 4 environment steps).
+        "gradient_steps": 1, # Number of gradient steps taken per training iteration. Usually 1 for DQN.
+        "n_steps": n_timesteps, # Total number of training steps.
+    }
+    #save training parameters in json file
+    with open(f"./results/run_{experiment_start}/training_parameters.json", "w") as f:
+        json.dump(parameters, f, indent=4)
+
     model = DQN(
         "CnnPolicy",
         envs,
-        learning_rate=1e-4, #3e-4 How fast the model updates its Q-values. Smaller = slower but more stable learning.
-        buffer_size=100_000, #Size of replay buffer. Stores past experiences to sample from during training.
-        batch_size=128, #Number of experiences sampled from replay buffer per update. Larger batch = more stable updates.
-        learning_starts=learning_starts, #Number of timesteps before learning begins. Helps the replay buffer fill with experiences first.
-        gamma=0.99, #Discount factor. Determines how much future rewards are considered. Closer to 1 = long-term focused.
-        exploration_initial_eps=1.0, #Start of ε-greedy exploration. Agent takes completely random actions initially.
-        exploration_final_eps=0.05, #Final ε value. Even late in training, there's a 5% chance of random actions (exploration).
-        exploration_fraction=0.25, #Fraction of total training steps over which ε linearly decays from 1.0 to 0.05.
-        target_update_interval=1_000, #How often (in steps) the target network is updated. More frequent updates can stabilize learning.
-        train_freq=4, #How often the model trains (every 4 environment steps).
-        gradient_steps=1, #Number of gradient steps taken per training iteration. Usually 1 for DQN.
+        learning_rate=parameters["learning_rate"],
+        buffer_size=parameters["buffer_size"],
+        learning_starts=parameters["learning_starts"],
+        batch_size=parameters["batch_size"],
+        gamma=parameters["gamma"],
+        exploration_initial_eps=parameters["exploration_initial_eps"],
+        exploration_final_eps=parameters["exploration_final_eps"],
+        exploration_fraction=parameters["exploration_fraction"],
+        target_update_interval=parameters["target_update_interval"],
+        train_freq=parameters["train_freq"],
+        gradient_steps=parameters["gradient_steps"],
         verbose=2,
         tensorboard_log=f"./results/run_{experiment_start}/tensorboard/",
 
