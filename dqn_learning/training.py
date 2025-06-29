@@ -54,7 +54,7 @@ def train(experiment_start, n_timesteps=50_000):
     learning_starts = int(0.2 * n_timesteps)
     parameters = {
         "learning_rate": 3e-4, # How fast the model updates its Q-values. Smaller = slower but more stable learning.
-        "buffer_size": 100_000, # Size of replay buffer. Stores past experiences to sample from during training.
+        "buffer_size": 50_000, # Size of replay buffer. Stores past experiences to sample from during training.
         "batch_size": 128, # Number of experiences sampled from replay buffer per update. Larger batch = more stable updates.
         "learning_starts": learning_starts, # Number of timesteps before learning begins. Helps the replay buffer fill with experiences first.
         "gamma": 0.99, # Discount factor. Determines how much future rewards are considered. Closer to 1 = long-term focused.
@@ -157,7 +157,7 @@ if __name__ == "__main__":
         log_file = open(f"./results/run_{experiment_start}/trainig.log", "w")
         sys.stdout = log_file
     sys.stderr = log_file
-    train(experiment_start, n_timesteps=100_000)
+    train(experiment_start, n_timesteps=200_000)
     plot_results(experiment_start)
     make_video(experiment_start)
     print("Training and evaluation completed successfully.")
