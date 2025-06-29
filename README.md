@@ -7,7 +7,7 @@ Using the existing CarRacing-v3 environment from Gymnasium, we propose a compara
 
 ## RL Methods
 
-### Tabular Q-Learning  
+### Tabular Q-Learning - State-Action Pair Approach
 Discretizes each 96×96×3 frame to an 8×8 grid (RGB or grayscale) with integer bins (32 or 64 levels) and maintains a Q-table over these discrete states and five actions. The agent uses ε-greedy exploration (decaying from 1.0 to 0.1) and updates via the Bellman equation over 1 000–100 000 episodes.
 
 ### Deep Q-Learning (DQN) – CNN-Based Approach  
@@ -16,7 +16,6 @@ Uses Stable-Baselines3’s DQN with a CNN policy to approximate Q(s,a) from raw 
 ## Repo Structure
 
 ```text
-.
 ├── dqn_learning  
 │   ├── training.py             # DQN training script (Stable-Baselines3)  
 │  
@@ -41,10 +40,3 @@ Uses Stable-Baselines3’s DQN with a CNN policy to approximate Q(s,a) from raw 
    Run the following to install required packages:
    ```bash
    pip install gymnasium==0.28.1 stable-baselines3==2.3.2 imageio numpy==1.23.5 matplotlib pandas cv2 tqdm
-
-
-## Demo
-
-<video width="640" controls>
-  <source src="./demo.mp4" type="video/mp4">
-</video>
