@@ -55,7 +55,7 @@ def train(experiment_start, n_timesteps=50_000):
         "CnnPolicy",
         envs,
         learning_rate=1e-4, #3e-4 How fast the model updates its Q-values. Smaller = slower but more stable learning.
-        buffer_size=50_000, #Size of replay buffer. Stores past experiences to sample from during training.
+        buffer_size=100_000, #Size of replay buffer. Stores past experiences to sample from during training.
         batch_size=128, #Number of experiences sampled from replay buffer per update. Larger batch = more stable updates.
         learning_starts=learning_starts, #Number of timesteps before learning begins. Helps the replay buffer fill with experiences first.
         gamma=0.99, #Discount factor. Determines how much future rewards are considered. Closer to 1 = long-term focused.
@@ -99,10 +99,10 @@ def plot_results(experiment_start):
 
 
 def make_video(experiment_start):
-    video_path=f"results/run_{experiment_start}/dqn_carracing.mp4"
-    best_model_path=f"./results/run_{experiment_start}/best_model/best_model",
+    video_path = f"results/run_{experiment_start}/dqn_carracing.mp4"
+    best_model_path = f"./results/run_{experiment_start}/best_model/best_model.zip"
 
-    print("Loading best model from video generation")
+    print("Loading best model for video generation...")
     model = DQN.load(best_model_path)
     print("Model loaded successfully.")
 
@@ -128,7 +128,7 @@ def make_video(experiment_start):
     return
 
 if __name__ == "__main__":
-    #make experiment start as yyy-mm-dd_HH-MM
+
     experiment_start = datetime.now().strftime("%Y-%m-%d_%H-%M")
     print(f"Experiment started at {experiment_start}")
 
@@ -138,7 +138,7 @@ if __name__ == "__main__":
         log_file = open(f"./results/run_{experiment_start}/trainig.log", "w")
         sys.stdout = log_file
     sys.stderr = log_file
-    train(experiment_start, n_timesteps=50_000)
+    train(experiment_start, n_timesteps=100_000)
     plot_results(experiment_start)
     make_video(experiment_start)
     print("Training and evaluation completed successfully.")
