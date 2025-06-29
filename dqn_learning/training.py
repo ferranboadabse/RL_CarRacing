@@ -51,16 +51,15 @@ def train(experiment_start, n_timesteps=50_000):
         render=False,
         verbose=1,
     )
-    learning_starts = int(0.2 * n_timesteps)
     parameters = {
         "learning_rate": 3e-4, # How fast the model updates its Q-values. Smaller = slower but more stable learning.
         "buffer_size": 50_000, # Size of replay buffer. Stores past experiences to sample from during training.
         "batch_size": 128, # Number of experiences sampled from replay buffer per update. Larger batch = more stable updates.
-        "learning_starts": learning_starts, # Number of timesteps before learning begins. Helps the replay buffer fill with experiences first.
+        "learning_starts": 10_000, # Number of timesteps before learning begins. Helps the replay buffer fill with experiences first.
         "gamma": 0.99, # Discount factor. Determines how much future rewards are considered. Closer to 1 = long-term focused.
         "exploration_initial_eps": 1.0, # Start of ε-greedy exploration. Agent takes completely random actions initially.
         "exploration_final_eps": 0.05, # Final ε value. Even late in training, there's a 5% chance of random actions (exploration).
-        "exploration_fraction": 0.2, # Fraction of total training steps over which ε linearly decays from 1.0 to 0.05.
+        "exploration_fraction": 0.1, # Fraction of total training steps over which ε linearly decays from 1.0 to 0.05.
         "target_update_interval": 1_000, # How often (in steps) the target network is updated. More frequent updates can stabilize learning.
         "train_freq": 4, # How often the model trains (every 4 environment steps).
         "gradient_steps": 1, # Number of gradient steps taken per training iteration. Usually 1 for DQN.
