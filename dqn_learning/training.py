@@ -44,27 +44,27 @@ def train(experiment_start, n_timesteps=50_000):
         eval_env,
         best_model_save_path=f'./results/run_{experiment_start}/best_model/',
         log_path=f'./results/run_{experiment_start}/results/',
-        eval_freq=5000,
-        n_eval_episodes=3,
+        eval_freq=2_500, # Evaluation frequency
+        n_eval_episodes=3, # More episodes smooth out evaluation reward estimates
         deterministic=True,
         render=False,
         verbose=1,
     )
-
+    learning_starts = int(0.3 * n_timesteps)
     model = DQN(
         "CnnPolicy",
         envs,
-        learning_rate=3e-4,
-        buffer_size=50_000,
-        batch_size=128,
-        learning_starts=5_000,
-        gamma=0.99,
-        exploration_initial_eps=1.0,
-        exploration_final_eps=0.05,
-        exploration_fraction=0.1,
-        target_update_interval=1_000,
-        train_freq=4,
-        gradient_steps=1,
+        learning_rate=1e-4, #3e-4 How fast the model updates its Q-values. Smaller = slower but more stable learning.
+        buffer_size=50_000, #Size of replay buffer. Stores past experiences to sample from during training.
+        batch_size=128, #Number of experiences sampled from replay buffer per update. Larger batch = more stable updates.
+        learning_starts=learning_starts, #Number of timesteps before learning begins. Helps the replay buffer fill with experiences first.
+        gamma=0.99, #Discount factor. Determines how much future rewards are considered. Closer to 1 = long-term focused.
+        exploration_initial_eps=1.0, #Start of ε-greedy exploration. Agent takes completely random actions initially.
+        exploration_final_eps=0.05, #Final ε value. Even late in training, there's a 5% chance of random actions (exploration).
+        exploration_fraction=0.25, #Fraction of total training steps over which ε linearly decays from 1.0 to 0.05.
+        target_update_interval=1_000, #How often (in steps) the target network is updated. More frequent updates can stabilize learning.
+        train_freq=4, #How often the model trains (every 4 environment steps).
+        gradient_steps=1, #Number of gradient steps taken per training iteration. Usually 1 for DQN.
         verbose=2,
         tensorboard_log=f"./results/run_{experiment_start}/tensorboard/",
 
